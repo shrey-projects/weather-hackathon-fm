@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/images/favicon-32x32.png"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+    <title>Frontend Mentor | Weather app</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="header-bar">
+          <div class="logo">
+            <img src="assets/images/logo.svg" alt="Weather Now Logo" />
+          </div>
+          <div class="theme-controls">
+            <button id="theme-toggle" aria-label="Toggle theme">
+              <img
+                src="assets/images/light-mode.webp"
+                alt="Switch to light mode"
+              />
+            </button>
+            <button id="compare-toggle" aria-label="Compare locations">
+              <img src="assets/images/compare.webp" alt="Compare" />
+              Compare
+            </button>
+            <div class="units-dropdown">
+              <button class="dropdown-toggle" id="units-btn">
+                <img
+                  class="units-image"
+                  src="assets/images/icon-units.svg"
+                  alt=""
+                />
+                Units
+                <img
+                  class="dropdown-image"
+                  src="assets/images/icon-dropdown.svg"
+                  alt=""
+                  aria-hidden="true"
+                />
+              </button>
+              <div class="dropdown-bridge"></div>
+              <div class="dropdown-menu">
+                <div class="dropdown-section">
+                  <button class="dropdown-switch">Switch to Imperial</button>
+                </div>
+                <div class="dropdown-section">
+                  <span class="dropdown-title">Temperature</span>
+                  <span class="dropdown-label active"
+                    >Celsius (°C)
+                    <img
+                      src="assets/images/icon-checkmark.svg"
+                      alt=""
+                      class="checkmark"
+                    />
+                  </span>
+                  <span class="dropdown-label"
+                    >Fahrenheit (°F)
+                    <img
+                      src="assets/images/icon-checkmark.svg"
+                      alt=""
+                      class="checkmark"
+                    />
+                  </span>
+                </div>
+                <div class="dropdown-section">
+                  <span class="dropdown-title">Wind Speed</span>
+                  <span class="dropdown-label active"
+                    >km/h
+                    <img
+                      src="assets/images/icon-checkmark.svg"
+                      alt=""
+                      class="checkmark"
+                    />
+                  </span>
+                  <span class="dropdown-label"
+                    >mph
+                    <img
+                      src="assets/images/icon-checkmark.svg"
+                      alt=""
+                      class="checkmark"
+                    />
+                  </span>
+                </div>
+                <div class="dropdown-section">
+                  <span class="dropdown-title">Precipitation</span>
+                  <span class="dropdown-label active"
+                    >Millimeters (mm)
+                    <img
+                      src="assets/images/icon-checkmark.svg"
+                      alt=""
+                      class="checkmark"
+                    />
+                  </span>
+                  <span class="dropdown-label"
+                    >Inches (in)
+                    <img
+                      src="assets/images/icon-checkmark.svg"
+                      alt=""
+                      class="checkmark"
+                    />
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h1>How's the sky looking today?</h1>
+        <form class="search-form">
+          <div class="search-input-container">
+            <div class="search-input">
+              <img
+                class="search-image"
+                src="assets/images/icon-search.svg"
+                alt=""
+              />
+              <input
+                type="search"
+                name="location"
+                placeholder="Search for a city..."
+                autocomplete="off"
+                required
+              />
+            </div>
+            <div class="search-suggestions">a</div>
+          </div>
+          <button type="submit">Search</button>
+        </form>
+      </header>
+      <div class="loading-overlay">
+        <div class="loading-animation">
+          <div class="weather-icon-container">
+            <div class="sun-rays"></div>
+            <div class="sun-core"></div>
+            <div class="cloud cloud-1">
+              <div class="raindrops">
+                <div class="drop drop-1"></div>
+                <div class="drop drop-2"></div>
+                <div class="drop drop-3"></div>
+              </div>
+            </div>
+            <div class="cloud cloud-2"></div>
+          </div>
+          <div class="loading-text">
+            Loading weather data <span class="dot-1"></span
+            ><span class="dot-2"></span><span class="dot-3"></span>
+          </div>
+        </div>
+      </div>
+      <main class="main-content">
+        <div class="item current-weather">
+          <section class="weather-main">
+            <div class="favourite-toggle">
+              <img
+                src="assets/images/star-outline.svg"
+                alt="Add to favourites"
+                class="favourite-icon"
+                data-location=""
+                data-lat=""
+                data-lon=""
+              />
+            </div>
+            <div class="radar-toggle">
+              <button id="radar-button" aria-label="View weather radar">
+                <img src="assets/images/icon-radar.webp" alt="Radar" />
+                <span>Radar</span>
+              </button>
+            </div>
+            <div class="weather-meta">
+              <h2 class="weather-location" id="weather-location">
+                Berlin, Germany
+              </h2>
+              <p class="weather-date" id="weather-date">Tuesday, Aug 5, 2025</p>
+              <div class="weather-tip" id="weather-tip">
+                <span class="weather-tip-icon">💡</span>
+                <span class="weather-tip-text"
+                  >Perfect weather for a walk!</span
+                >
+              </div>
+            </div>
+            <div class="weather-info">
+              <img
+                src="assets/images/icon-sunny.webp"
+                alt="Sunny"
+                id="weather-icon"
+              />
+              <span class="weather-temperature" id="weather-temperature"
+                ><i>20°</i></span
+              >
+            </div>
+          </section>
+
+          <section class="weather-details-container">
+            <div class="weather-details-wrapper">
+              <div class="weather-details active">
+                <div class="weather-detail">
+                  <span class="weather-detail-label">Feels Like</span>
+                  <span class="weather-detail-value" id="weather-feelslike"
+                    >18°</span
+                  >
+                </div>
+                <div class="weather-detail">
+                  <span class="weather-detail-label">Humidity</span>
+                  <span class="weather-detail-value" id="weather-humidity"
+                    >46%</span
+                  >
+                </div>
+                <div class="weather-detail">
+                  <span class="weather-detail-label">Wind</span>
+                  <span class="weather-detail-value" id="weather-wind"
+                    >14 km/h</span
+                  >
+                </div>
+                <div class="weather-detail">
+                  <span class="weather-detail-label">Precipitation</span>
+                  <span class="weather-detail-value" id="weather-precip"
+                    >0 mm</span
+                  >
+                </div>
+              </div>
+
+              <div class="weather-details">
+                <div class="weather-detail">
+                  <span class="weather-detail-label">UV Index</span>
+                  <span class="weather-detail-value" id="weather-uv"
+                    >4 (Moderate)</span
+                  >
+                </div>
+                <div class="weather-detail">
+                  <span class="weather-detail-label">Visibility</span>
+                  <span class="weather-detail-value" id="weather-visibility"
+                    >10 km</span
+                  >
+                </div>
+                <div class="weather-detail">
+                  <span class="weather-detail-label">Pressure</span>
+                  <span class="weather-detail-value" id="weather-pressure"
+                    >1015 hPa</span
+                  >
+                </div>
+                <div class="weather-detail">
+                  <span class="weather-detail-label">Dew Point</span>
+                  <span class="weather-detail-value" id="weather-dewpoint"
+                    >12°</span
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="weather-navigation">
+              <button
+                class="nav-arrow nav-prev"
+                aria-label="Previous weather details"
+              >
+                <img src="assets/images/icon-dropdown.svg" alt="" />
+              </button>
+
+              <div class="pagination-dots">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+              </div>
+
+              <button
+                class="nav-arrow nav-next"
+                aria-label="Next weather details"
+              >
+                <img src="assets/images/icon-dropdown.svg" alt="" />
+              </button>
+            </div>
+          </section>
+        </div>
+        <div class="item favourites-section">
+          <div class="favourites-header">
+            <h2>Favourite Locations</h2>
+          </div>
+          <div class="favourites-list">
+            <div class="no-favourites">No favourite locations added yet</div>
+          </div>
+        </div>
+        <div class="item daily-forecast">
+          <h2>Daily forecast</h2>
+          <div class="weekly-trend">
+            <div class="trend-icon">📊</div>
+            <p class="trend-message" id="weekly-trend-message">
+              Loading weekly comparison...
+            </p>
+          </div>
+          <ul>
+            <li class="daily-card">
+              <span class="daily-day">Tue</span>
+              <img src="assets/images/icon-rain.webp" alt="Rain" />
+              <div class="daily-temps">
+                <span class="daily-temperature">20°</span>
+                <span class="daily-temperature-low">14°</span>
+              </div>
+            </li>
+            <li class="daily-card">
+              <span class="daily-day">Wed</span>
+              <img src="assets/images/icon-drizzle.webp" alt="Drizzle" />
+              <div class="daily-temps">
+                <span class="daily-temperature">21°</span>
+                <span class="daily-temperature-low">15°</span>
+              </div>
+            </li>
+            <li class="daily-card">
+              <span class="daily-day">Thu</span>
+              <img src="assets/images/icon-sunny.webp" alt="Sunny" />
+              <div class="daily-temps">
+                <span class="daily-temperature">24°</span>
+                <span class="daily-temperature-low">14°</span>
+              </div>
+            </li>
+            <li class="daily-card">
+              <span class="daily-day">Fri</span>
+              <img
+                src="assets/images/icon-partly-cloudy.webp"
+                alt="Partly Cloudy"
+              />
+              <div class="daily-temps">
+                <span class="daily-temperature">25°</span>
+                <span class="daily-temperature-low">13°</span>
+              </div>
+            </li>
+            <li class="daily-card">
+              <span class="daily-day">Sat</span>
+              <img src="assets/images/icon-storm.webp" alt="Storm" />
+              <div class="daily-temps">
+                <span class="daily-temperature">21°</span>
+                <span class="daily-temperature-low">15°</span>
+              </div>
+            </li>
+            <li class="daily-card">
+              <span class="daily-day">Sun</span>
+              <img src="assets/images/icon-snow.webp" alt="Snow" />
+              <div class="daily-temps">
+                <span class="daily-temperature">25°</span>
+                <span class="daily-temperature-low">16°</span>
+              </div>
+            </li>
+            <li class="daily-card">
+              <span class="daily-day">Mon</span>
+              <img src="assets/images/icon-fog.webp" alt="Fog" />
+              <div class="daily-temps">
+                <span class="daily-temperature">24°</span>
+                <span class="daily-temperature-low">15°</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="item hourly-forecast">
+          <div class="hourly-header">
+            <h2>Hourly forecast</h2>
+            <div class="hourly-dropdown">
+              <button class="dropdown-toggle">
+                Tuesday
+                <img
+                  class="dropdown-image"
+                  src="assets/images/icon-dropdown.svg"
+                  alt=""
+                />
+              </button>
+              <div class="dropdown-bridge"></div>
+              <div class="hourly-dropdown-menu">
+                <button class="weekday-item">Monday</button>
+                <button class="weekday-item active">Tuesday</button>
+                <button class="weekday-item">Wednesday</button>
+                <button class="weekday-item">Thursday</button>
+                <button class="weekday-item">Friday</button>
+                <button class="weekday-item">Saturday</button>
+                <button class="weekday-item">Sunday</button>
+              </div>
+            </div>
+          </div>
+          <ul>
+            <li class="hourly-card">
+              <div class="hourly-card-time">
+                <img src="assets/images/icon-overcast.webp" alt="Cloudy" />
+                <span class="hour">3 PM</span>
+              </div>
+              <span class="hourly-temperature">20°</span>
+            </li>
+            <li class="hourly-card">
+              <div class="hourly-card-time">
+                <img
+                  src="assets/images/icon-partly-cloudy.webp"
+                  alt="Partly Cloudy"
+                />
+                <span class="hour">4 PM</span>
+              </div>
+
+              <span class="hourly-temperature">20°</span>
+            </li>
+            <li class="hourly-card">
+              <div class="hourly-card-time">
+                <img src="assets/images/icon-sunny.webp" alt="Sunny" />
+                <span class="hour">5 PM</span>
+              </div>
+
+              <span class="hourly-temperature">20°</span>
+            </li>
+            <li class="hourly-card">
+              <div class="hourly-card-time">
+                <img src="assets/images/icon-overcast.webp" alt="Cloudy" />
+                <span class="hour">6 PM</span>
+              </div>
+
+              <span class="hourly-temperature">19°</span>
+            </li>
+            <li class="hourly-card">
+              <div class="hourly-card-time">
+                <img src="assets/images/icon-snow.webp" alt="Snow" />
+                <span class="hour">7 PM</span>
+              </div>
+
+              <span class="hourly-temperature">18°</span>
+            </li>
+            <li class="hourly-card">
+              <div class="hourly-card-time">
+                <img src="assets/images/icon-fog.webp" alt="Fog" />
+                <span class="hour">8 PM</span>
+              </div>
+
+              <span class="hourly-temperature">18°</span>
+            </li>
+            <li class="hourly-card">
+              <div class="hourly-card-time">
+                <img src="assets/images/icon-snow.webp" alt="Snow" />
+                <span class="hour">9 PM</span>
+              </div>
+
+              <span class="hourly-temperature">17°</span>
+            </li>
+            <li class="hourly-card">
+              <div class="hourly-card-time">
+                <img src="assets/images/icon-overcast.webp" alt="Cloudy" />
+                <span class="hour">10 PM</span>
+              </div>
+
+              <span class="hourly-temperature">17°</span>
+            </li>
+          </ul>
+        </div>
+      </main>
+      <section id="weather-comparison" class="weather-comparison">
+        <div class="comparison-header">
+          <h2>Compare Weather</h2>
+          <p>See how weather conditions differ across two cities</p>
+        </div>
+        <div class="comparison-cities">
+          <div class="comparison-city">
+            <h3>Location 1</h3>
+            <div class="comparison-search-container">
+              <div class="search-input comparison-search">
+                <img
+                  class="search-image"
+                  src="assets/images/icon-search.svg"
+                  alt=""
+                />
+                <input
+                  type="search"
+                  name="comparison-location-1"
+                  placeholder="Search for a city..."
+                  autocomplete="off"
+                />
+              </div>
+              <div class="search-suggestions comparison-suggestions"></div>
+            </div>
+            <div class="comparison-results" id="comparison-results-1">
+              <div class="comparison-placeholder">
+                Select a location to compare
+              </div>
+            </div>
+          </div>
+          <div class="comparison-vs">VS</div>
+          <div class="comparison-city">
+            <h3>Location 2</h3>
+            <div class="comparison-search-container">
+              <div class="search-input comparison-search">
+                <img
+                  class="search-image"
+                  src="assets/images/icon-search.svg"
+                  alt=""
+                />
+                <input
+                  type="search"
+                  name="comparison-location-2"
+                  placeholder="Search for a city..."
+                  autocomplete="off"
+                />
+              </div>
+              <div class="search-suggestions comparison-suggestions"></div>
+            </div>
+            <div class="comparison-results" id="comparison-results-2">
+              <div class="comparison-placeholder">
+                Select a location to compare
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div id="radar-modal" class="radar-modal">
+        <div class="radar-modal-content">
+          <div class="radar-modal-header">
+            <h2>Weather Radar</h2>
+            <button class="radar-close-button" aria-label="Close radar view">
+              &times;
+            </button>
+          </div>
+          <div class="radar-map-container">
+            <div id="radar-map"></div>
+            <div class="radar-layers">
+              <button
+                class="radar-layer-button active"
+                data-layer="precipitation"
+              >
+                Rain
+              </button>
+            </div>
+            <div class="radar-timeline">
+              <button class="radar-timeline-button" id="radar-play-pause">
+                <img src="assets/images/icon-play.webp" alt="Play/Pause" />
+              </button>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value="100"
+                class="radar-slider"
+                id="radar-time-slider"
+              />
+              <span class="radar-time-label">Now</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
