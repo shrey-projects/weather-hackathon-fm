@@ -709,7 +709,88 @@ searchInput.addEventListener('input', function() {
     }, 300);
 });
 
+// Show "Current location" option on focvus
+searchInput.addEventListener('focus', function() {
+    suggestionsContainer.innerHTML = '';
 
+    // Add "Current Location" option
+    const currentLocationOption = document.createElement('div');
+    currentLocationOption.classList.add('suggestion-item', 'current-location-option');
+    currentLocationOption.style.display = 'flex';
+    currentLocationOption.style.alignItems = 'center';
+    currentLocationOption.innerHTML = `
+        <img src="assets/images/icon-location.svg" alt="Location" style="width: 14px; margin-right: 8px;" />
+        Current Location
+    `;
+
+    currentLocationOption.addEventListener('click', () => {
+        if (isCurrentLocationShown && currentLat !== null && currentLon !== null) {
+            suggestionsContainer.style.display = 'none';
+            return;
+        }
+
+        if (navigator.geolocation) {
+            toggleLoading(true);
+            suggestionsContainer.style.display = 'none';
+            searchInput.value = '';
+
+            navigator.geolocation.getCurrentPosition(
+                // Success callback
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    fetchWeather(lat, lon, '', '', true);
+                    searchInput.value = '';
+                },
+                // Error
+                (error) => {
+                    console.error('Geolocation error:', error);
+                    toggleLoading(false);
+                    searchInput.value = '';
+
+                    let errorTitle, errorMessage ;
+                    
+                    if (error.code === 1) {
+                        errorTitle = "Location access denied";
+                        errorMessage = "Please enable location access in your browser settings or search for a city manually.";
+                    } else if (error.code === 3) {
+                        errorTitle = "Location request timed out";
+                        errorMessage = "Couldn't get your location in time. Please try again or search for a city manually.";
+                    } else {
+                        errorTitle = "Location error";
+                        errorMessage = "There was a problem getting your location. Please try again or search for a city manually.";
+                    }
+
+                    suggestionsContainer.innerHTML = `
+                        <div class="no-results">
+                            <img src="assets/images/icon-error.svg" alt="Location error" />
+                            <div class="no-results-title">${errorTitle}</div>
+                            <div class="no-results-message">
+                                ${errorMessage}
+                            </div>
+                        </div>
+                    `;
+                    suggestionsContainer.style.display = 'block';
+                },
+                { timeout: 10000 }
+            );
+        } else {
+            suggestionsContainer.innerHTML = `
+                <div class="no-results">
+                    <img src="assets/images/icon-error.svg" alt="Location error" />
+                    <div class="no-results-title">Geolocation not supported</div>
+                    <div class="no-results-message">
+                        Your browser doesn't support geolocation. Please search for a city manually.
+                    </div>
+                </div>
+            `;
+            suggestionsContainer.style.display = 'block';
+        }
+    });
+
+    suggestionsContainer.appendChild(currentLocationOption);
+    suggestionsContainer.style.display = 'block';
+});
 
 searchForm.addEventListener('submit', function(e){
     e.preventDefault()
@@ -1093,77 +1174,77 @@ function setupComparisonSearch(inputName, suggestionsClass, resultsId) {
     const resultsContainer = document.getElementById(resultsId);
     let searchTimeout = null;
 
-  searchInput.addEventListener('input', function() {
-    const query = this.value.trim();
-    
-    const suggestionsContainer = this.closest('.comparison-search-container').querySelector('.comparison-suggestions');
-    
-    if (searchTimeout) {
-      clearTimeout(searchTimeout);
-    }
-    
-    searchTimeout = setTimeout(() => {
-      if (!query || query.length < 2) {
-        suggestionsContainer.style.display = 'none';
-        return;
-      }
-      
-      fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=5`)
-        .then(res => res.json())
-        .then(data => {
-          suggestionsContainer.innerHTML = '';
-          
-          if (data.results && data.results.length > 0) {
-            data.results.forEach(city => {
-              const displayName = city.country === city.name ? city.name : `${city.name}, ${city.country}`;
-              
-              const suggestion = document.createElement('div');
-              suggestion.classList.add('suggestion-item');
-              suggestion.textContent = displayName;
-              
-              suggestion.addEventListener('click', () => {
-                fetchComparisonWeather(city.latitude, city.longitude, city.name, city.country, resultsId);
-                searchInput.value = displayName;
-                suggestionsContainer.style.display = 'none';
-              });
-              
-              suggestionsContainer.appendChild(suggestion);
-            });
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        
+        const suggestionsContainer = this.closest('.comparison-search-container').querySelector('.comparison-suggestions');
+        
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+        }
+        
+        searchTimeout = setTimeout(() => {
+        if (!query || query.length < 2) {
+            suggestionsContainer.style.display = 'none';
+            return;
+        }
+        
+        fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=5`)
+            .then(res => res.json())
+            .then(data => {
+            suggestionsContainer.innerHTML = '';
             
-            suggestionsContainer.style.display = 'block';
-          } else {
-            suggestionsContainer.innerHTML = `
-              <div class="no-results">
-                <img src="assets/images/icon-error.svg" alt="No results found" />
-                <div class="no-results-title">No results found</div>
-                <div class="no-results-message">
-                  Try searching for a different city.
+            if (data.results && data.results.length > 0) {
+                data.results.forEach(city => {
+                const displayName = city.country === city.name ? city.name : `${city.name}, ${city.country}`;
+                
+                const suggestion = document.createElement('div');
+                suggestion.classList.add('suggestion-item');
+                suggestion.textContent = displayName;
+                
+                suggestion.addEventListener('click', () => {
+                    fetchComparisonWeather(city.latitude, city.longitude, city.name, city.country, resultsId);
+                    searchInput.value = displayName;
+                    suggestionsContainer.style.display = 'none';
+                });
+                
+                suggestionsContainer.appendChild(suggestion);
+                });
+                
+                suggestionsContainer.style.display = 'block';
+            } else {
+                suggestionsContainer.innerHTML = `
+                <div class="no-results">
+                    <img src="assets/images/icon-error.svg" alt="No results found" />
+                    <div class="no-results-title">No results found</div>
+                    <div class="no-results-message">
+                    Try searching for a different city.
+                    </div>
                 </div>
-              </div>
-            `;
-            suggestionsContainer.style.display = 'block';
-            
-            resultsContainer.innerHTML = `
-              <div class="comparison-no-results">
-                <img src="assets/images/icon-error.svg" alt="No results" />
-                <div>No search results found!</div>
-              </div>
-            `;
-          }
-        })
-        .catch(err => {
-          console.error('Error fetching city suggestions:', err);
-          suggestionsContainer.style.display = 'none';
+                `;
+                suggestionsContainer.style.display = 'block';
+                
+                resultsContainer.innerHTML = `
+                <div class="comparison-no-results">
+                    <img src="assets/images/icon-error.svg" alt="No results" />
+                    <div>No search results found!</div>
+                </div>
+                `;
+            }
+            })
+            .catch(err => {
+            console.error('Error fetching city suggestions:', err);
+            suggestionsContainer.style.display = 'none';
 
-          resultsContainer.innerHTML = `
-            <div class="comparison-no-results">
-              <img src="assets/images/icon-error.svg" alt="Error" />
-              <div>Something went wrong. Please try again.</div>
-            </div>
-          `;
-        });
-    }, 300);
-  });
+            resultsContainer.innerHTML = `
+                <div class="comparison-no-results">
+                <img src="assets/images/icon-error.svg" alt="Error" />
+                <div>Something went wrong. Please try again.</div>
+                </div>
+            `;
+            });
+        }, 300);
+    });
 
   document.addEventListener('click', function(e) {
     if (!searchInput.contains(e.target) && !Array.from(suggestionsContainers).some(container => container.contains(e.target))) {
