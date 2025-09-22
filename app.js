@@ -244,6 +244,9 @@ function fetchWeather(latitude, longitude, cityName = '', countryName = '', isCu
         // Get weekly trend
         getWeeklyTrend(latitude, longitude);
 
+        // Setup weather background effects
+        setWeatherBackground(weatherCode, isNightCurrent);
+
         toggleLoading(false);
     })
     .catch(err => {
@@ -1151,6 +1154,119 @@ function getWeeklyTrend(latitude, longitude) {
             weeklyTrendElement.textContent = "Weekly comparison not available";
             weeklyTrendElement.className = "trend-message";
         });
+}
+
+// Weather background functionality
+
+function setWeatherBackground(weatherCode, isNight) {
+    document.body.classList.remove('night-background', 'rain-background', 'snow-background', 'storm-background')
+
+    const effectsContainer = document.querySelector('.weather-background-effects');
+    effectsContainer.innerHTML = '';
+
+    if (isNight) {
+        document.body.classList.add('night-background');
+
+        const starCount = 250;
+
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+
+            const left = Math.random() * 100;
+            const top = Math.random() * 100;
+
+            const size = 2 + Math.random() * 3;
+
+            const twinkleDuration = 3 + Math.random() * 7 + 's';
+            const twinkleDelay = Math.random() * 10 + 's';
+
+            star.style.left = `${left}%`;
+            star.style.top = `${top}%`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.animationDuration = twinkleDuration;
+            star.style.animationDelay = twinkleDelay;
+
+            if (Math.random() < 0.05) {
+                star.classList.add('star-bright');
+            }
+
+            effectsContainer.appendChild(star);
+        }
+    }
+
+    // Rain effect
+    if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67].includes(weatherCode)) {
+        document.body.classList.add('rain-background');
+
+        const density = [51, 53, 56].includes(weatherCode) ? 20 : 70
+
+        for (let i = 0; i < density; i++) {
+            const drop = document.createElement('div');
+            drop.classList.add('rain-drop');
+
+            const left = Math.random() * 100;
+            const duration = 0.5 + Math.random() * 0.7;
+            const delay = Math.random() * 5;
+
+            drop.style.left = `${left}%`;
+            drop.style.animationDuration = `${duration}s`;
+            drop.style.animationDelay = `${delay}s`;
+
+            effectsContainer.appendChild(drop);
+        }
+    }
+
+    // Snow effect
+    if ([71, 73, 75, 77, 85, 86].includes(weatherCode)) {
+        document.body.classList.add('snow-background');
+
+        const density = 50;
+
+        for (let i = 0; i < density; i++) {
+            const flake = document.createElement('div');
+            flake.classList.add('snow-flake');
+
+            const left = Math.random() * 100;
+            const size = 2 + Math.random() * 4;
+            const duration = 5 + Math.random() * 10;
+            const delay = Math.random() * 5;
+            const opacity = 0.3 + Math.random() * 0.7;
+
+            flake.style.left = `${left}%`;
+            flake.style.width = `${size}px`;
+            flake.style.height = `${size}px`;
+            flake.style.opacity = opacity;
+            flake.style.animationDuration = `${duration}s`;
+            flake.style.animationDelay = `${delay}s`;
+
+            effectsContainer.appendChild(flake);
+        }
+    }
+
+    // Storm effect
+    if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67].includes(weatherCode)) {
+        document.body.classList.add('rain-background');
+        document.body.classList.add('storm-background');
+
+        const density = 100;
+        
+        for (let i = 0; i < density; i++) {
+            const drop = document.createElement('div');
+            drop.classList.add('rain-drop');
+
+            const left = Math.random() * 100;
+            const duration = 0.3 + Math.random() * 0.5;
+            const delay = Math.random() * 3;
+
+            drop.style.left = `${left}%`;
+            drop.style.animationDuration = `${duration}s`;
+            drop.style.animationDelay = `${delay}s`;
+
+            effectsContainer.appendChild(drop);
+        }
+    }
 }
 
 // Comparison functionality
