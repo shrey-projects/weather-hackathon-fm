@@ -103,6 +103,13 @@ function fetchWeather(latitude, longitude, cityName = '', countryName = '', isCu
         }
         document.getElementById('weather-icon').src = `assets/images/${iconFile}`;
 
+        const weatherIcon = document.getElementById('weather-icon')
+        if (weatherIcon) {
+            weatherIcon.src = `assets/images/${iconFile}`;
+        } else {
+            console.warn("Weather icon element not found");
+        }
+
         // Update location and date
         const locationText = isCurrentLocation ? 'Current Location' : (cityName ? (countryName && cityName !== countryName ? `${cityName}, ${countryName}` : cityName) : 'Unknown location');
         document.getElementById('weather-location').textContent = locationText;
@@ -1162,6 +1169,12 @@ function setWeatherBackground(weatherCode, isNight) {
     document.body.classList.remove('night-background', 'rain-background', 'snow-background', 'storm-background')
 
     const effectsContainer = document.querySelector('.weather-background-effects');
+
+    if (!effectsContainer) {
+        console.warn("Weather background effects container not found");
+        return;
+    }
+
     effectsContainer.innerHTML = '';
 
     if (isNight) {
