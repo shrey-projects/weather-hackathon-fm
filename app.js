@@ -1144,8 +1144,12 @@ function getWeeklyTrend(latitude, longitude) {
             let trendMessage = "";
             let trendClass = "trend-message";
 
+            // Different thresholds based on units
+            const tempThreshold = isMetric ? 1 : 1.8;
+            const precipThreshold = isMetric ? 1: 0.04;
+
             // temperature trend
-            if (Math.abs(tempDiff) < 1) {
+            if (Math.abs(tempDiff) < tempThreshold) {
                 trendMessage = "This week's temperature will be similar to last week.";
             } else if (tempDiff > 0) {
                 trendMessage = `This week will be ${tempDiff.toFixed(1)}° warmer than last week.`;
@@ -1156,13 +1160,13 @@ function getWeeklyTrend(latitude, longitude) {
             }
 
             // precipitation trend
-            if (Math.abs(precipDiff) < 1) {
+            if (Math.abs(precipDiff) < precipThreshold) {
                 trendMessage += " Expect similar amounts of precipitation.";
             } else if (precipDiff > 0) {
                 const unit = isMetric ? "mm" : "in";
                 trendMessage += ` Expect ${precipDiff.toFixed(1)}${unit} more precipitation.`;
                 trendClass += " trend-wetter";
-            } else if (sumThisWeekPrecip < 1 && sumLastWeekPrecip > 5) {
+            } else if (sumThisWeekPrecip < precipThreshold && sumLastWeekPrecip > precipThreshold * 5) {
                 trendMessage += " This week will be much drier than last week.";
                 trendClass += " trend-drier";
             } else if (precipDiff < 0) {
