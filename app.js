@@ -18,8 +18,17 @@ function fetchWeather(latitude, longitude, cityName = '', countryName = '', isCu
     // Show loading animation
     toggleLoading(true);
 
+    // Individual unit settings
+    const tempLabels = document.querySelectorAll('.dropdown-section:nth-child(2) .dropdown-label');
+    const windLabels = document.querySelectorAll('.dropdown-section:nth-child(3) .dropdown-label');
+    const precipLabels = document.querySelectorAll('.dropdown-section:nth-child(4) .dropdown-label');
+
+    const tempUnit = tempLabels[0].classList.contains('active') ? 'celsius' : 'fahrenheit';
+    const windUnit = windLabels[0].classList.contains('active') ? 'kmh' : 'mph';
+    const precipUnit = precipLabels[0].classList.contains('active') ? 'mm' : 'inch';
+
     // Open-Meteo API endpoint
-    const unitParams = isMetric ? '' : '&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch';
+    const unitParams = `&temperature_unit=${tempUnit}&windspeed_unit=${windUnit}&precipitation_unit=${precipUnit}`;
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weathercode,windspeed_10m,visibility,pressure_msl,uv_index,dewpoint_2m&daily=temperature_2m_max,temperature_2m_min,weathercode,sunrise,sunset&timezone=auto${unitParams}`;    
         
     fetch(url)
@@ -1929,6 +1938,56 @@ function initializeUnitsControl() {
         dropdown.classList.toggle('show');
 
         this.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.dropdown-section:not(:first-child) .dropdown-label').forEach(label => {
+        label.style.cursor = 'pointer';
+        label.addEventListener('click', function() {
+            const section = this.closest('.dropdown-section');
+            const labels = section.querySelectorAll('.dropdown-label');
+
+            if (this.classList.contains('active')) return;
+
+            labels.forEach(lbl => lbl.classList.remove('active'));
+            this.classList.add('active');
+
+            const tempLabels = document.querySelectorAll('.dropdown-section:nth-child(2) .dropdown-label');
+            const windLabels = document.querySelectorAll('.dropdown-section:nth-child(3) .dropdown-label');
+            const precipLabels = document.querySelectorAll('.dropdown-section:nth-child(4) .dropdown-label');
+
+            const tempIsMetric = tempLabels[0].classList.contains('active');
+            const windIsMetric = windLabels[0].classList.contains('active');
+            const precipIsMetric = precipLabels[0].classList.contains('active');
+
+            isMetric = tempIsMetric && windIsMetric && precipIsMetric;
+
+            const switchButton = document.querySelector('.dropdown-section:first-child .dropdown-switch');
+            switchButton.textContent = isMetric ? 'Switch to Imperial' : 'Switch to Metric';
+
+            // Refresh weather with updated units
+
+            if (isCurrentLocationShown && currentLat !== null && currentLon !== null) {
+                fetchWeather(currentLat, currentLon, '', '', true);
+            } else {
+                const weatherLocation = document.getElementById('weather-location').textContent;
+                if (weatherLocation) {
+                    const locationParts = weatherLocation.split(',');
+                    const cityName = locationParts[0].trim();
+                    const countryName = locationParts.length > 1 ? locationParts[1].trim() : cityName;
+        
+                    fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1`)
+                        .then(res => res.json())
+                        .then(geoData => {
+                            if (geoData.results && geoData.results.length > 0) {
+                                const result = geoData.results[0];
+                                fetchWeather(result.latitude, result.longitude, result.name, result.country);
+                            }
+                        });
+                } else {
+                    fetchWeather(35.68, 139.65, 'Tokyo', 'Japan');
+                }
+            }
+        })
     });
 }
 
