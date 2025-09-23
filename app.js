@@ -140,7 +140,7 @@ function fetchWeather(latitude, longitude, cityName = '', countryName = '', isCu
         let uvLevel = '';
         let uvColor = '';
 
-        if (uvIndex !== undefined) {
+        if (uvIndex !== undefined && uvIndex > 0) {
             const uvVal = Math.round(uvIndex);
             if (uvVal < 3) {
                 uvLevel = 'Low';
