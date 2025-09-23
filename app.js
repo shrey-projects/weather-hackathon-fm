@@ -1957,6 +1957,8 @@ function setupFavouritesToggle() {
 // Get user's geolocation if available
 function loadUserLocation() {
     if (navigator.geolocation) {
+        toggleLoading(true);
+
         navigator.geolocation.getCurrentPosition(
             // Success callback
             (position) => {
@@ -1964,8 +1966,14 @@ function loadUserLocation() {
                 const lon = position.coords.longitude;
                 fetchWeather(lat, lon, '', '', true);
             },
-            () => {}
+            (error) => {
+                console.log('Geolocation error or denied:', error.message);
+                fetchWeather(35.68, 139.65, 'Tokyo', 'Japan')
+            },
+            { timeout: 10000 , maximumAge: 0}
         );
+    } else {
+        fetchWeather(35.68, 139.65, 'Tokyo', 'Japan');
     }
 }
 
@@ -1993,7 +2001,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeUIControls();
 
     // Load initial data
-    fetchWeather(35.68, 139.65, 'Tokyo', 'Japan');
     loadUserLocation();
     loadFavourites();
 
