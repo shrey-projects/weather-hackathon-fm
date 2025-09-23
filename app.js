@@ -521,6 +521,24 @@ function toggleUnits() {
             fetchWeather(35.68, 139.65, 'Tokyo', 'Japan');
         }
     }
+
+    // Check if comparison cards exist and refresh those with new units
+    document.querySelectorAll('.comparison-card').forEach(card => {
+        const resultId = card.closest('[id^="comparison-results"]').id;
+        const inputName = resultId === 'comparison-results-1' ? 'comparison-location-1' : 'comparison-location-2';
+        const inputValue = document.querySelector(`input[name="${inputName}"]`).value;
+
+        if (inputValue) {
+            fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(inputValue)}&count=1`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.results && data.results.length > 0) {
+                        const result = data.results[0];
+                        fetchComparisonWeather(result.latitude, result.longitude, result.name, result.country, resultId);
+                    }
+                })
+        }
+    })
 }
 
 function toggleLoading(show) {
