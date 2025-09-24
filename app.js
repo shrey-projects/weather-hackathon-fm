@@ -263,7 +263,8 @@ function fetchWeather(latitude, longitude, cityName = '', countryName = '', isCu
         // Setup weather background effects
         setWeatherBackground(weatherCode, isNightCurrent);
 
-        toggleLoading(false);
+        toggleLoading(false, animateWeatherValues);
+
     })
     .catch(err => {
         console.error('Weather API error:', err);
@@ -550,7 +551,7 @@ function toggleUnits() {
     })
 }
 
-function toggleLoading(show) {
+function toggleLoading(show, callback) {
     const loadingOverlay = document.querySelector('.loading-overlay');
 
     if (show) {
@@ -560,6 +561,10 @@ function toggleLoading(show) {
         setTimeout(() => {
             loadingOverlay.classList.remove('active');
             document.body.style.overflow = '';
+
+            if (typeof callback === 'function') {
+                callback();
+            }
         }, 500);
     }
 }
@@ -2029,7 +2034,7 @@ function loadUserLocation() {
                 console.log('Geolocation error or denied:', error.message);
                 fetchWeather(35.68, 139.65, 'Tokyo', 'Japan')
             },
-            { timeout: 10000 , maximumAge: 0}
+            { timeout: 6000 , maximumAge: 0}
         );
     } else {
         fetchWeather(35.68, 139.65, 'Tokyo', 'Japan');
@@ -2052,6 +2057,55 @@ function setupRadarFeature() {
             }
         });
     }
+}
+
+// Animate numbers
+function animateValue(element, start, end, duration) {
+    if (start === end) return;
+
+    const unit = element.textContent.replace(/[0-9]/g, '');
+    const startTime = performance.now();
+
+    function animate(currentTime) {
+        const elapsedTime = currentTime - startTime;
+        const progress = Math.min(elapsedTime / duration, 1);
+        const easedProgress = 1 - Math.pow(1 - progress, 2);
+        const currentValue = Math.round(start + (end - start) * easedProgress);
+        
+        element.textContent = `${currentValue}${unit}`;
+
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        }
+    }
+
+    requestAnimationFrame(animate);
+}
+
+function animateWeatherValues() {
+    const tempElement = document.getElementById('weather-temperature').querySelector('i');
+    const currentTemp = parseInt(tempElement.textContent);
+    tempElement.textContent = `0°`;
+    animateValue(tempElement, 0, currentTemp, 1000);
+
+    const metrics = [
+        'weather-feelslike',
+        'weather-humidity',
+        'weather-wind',
+        'weather-uv'
+    ];
+
+    metrics.forEach(id => {
+        const element = document.getElementById(id);
+        if (!element) return;
+
+        const value = parseInt(element.textContent);
+        if (!isNaN(value)) {
+            const unit = element.textContent.replace(/[0-9]/g, '');
+            element.textContent = `0${unit}`;
+            animateValue(element, 0, value, 800);
+        }
+    });
 }
 
 // DOM Content Loaded
