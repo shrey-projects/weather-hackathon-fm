@@ -808,7 +808,7 @@ body.light-theme .nav-arrow img {
     height: 100px;
 }
 
-.weather-detail:hover {
+.weather-detail:hover, .daily-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -2280,6 +2280,7 @@ img[src*="icon-rain"], img[src*="icon-drizzle"] {
         min-width: 0;
         padding: 0.8rem 0.4rem;
         gap: 0.5rem;
+        transition: transform 0.2s ease-out;
     }
 
     .daily-day {
