@@ -43,6 +43,10 @@ body.light-theme {
 
 /* Reset */
 
+html {
+    scroll-behavior: smooth;
+}
+
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 img { display: block; max-width: 100%; }
 p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
@@ -80,6 +84,20 @@ body {
 button,
 h1, h2, p, span {
     transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+}
+
+.favourites-list,
+.hourly-forecast ul,
+.search-suggestions,
+.comparison-suggestions {
+    overscroll-behavior: contain;
+    scroll-snap-type: y proximity;
+}
+
+.favourite-card,
+.hourly-card,
+.suggestion-item {
+    scroll-snap-align: start;
 }
 
 button { 
@@ -2268,3 +2286,4 @@ img[src*="icon-rain"], img[src*="icon-drizzle"] {
         max-width: 90%;
     }
 }
+
