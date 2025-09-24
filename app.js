@@ -2002,6 +2002,12 @@ function setupFavouritesToggle() {
         if (e.target.classList.contains('favourite-icon') || e.target.parentElement.classList.contains('favourite-icon')) {
             const icon = e.target.classList.contains('favourite-icon') ? e.target : e.target.parentElement;
             let locationName, countryName = '';
+
+            icon.classList.add('animate');
+
+            setTimeout(() => {
+                icon.classList.remove('animate');
+            }, 400);
             
             if (icon.dataset.location === 'Current Location') {
                 locationName = 'Current Location';
