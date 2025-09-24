@@ -568,6 +568,15 @@ body.light-theme .weather-tip {
     right: 20px;
     cursor: pointer;
     z-index: 10;
+    transition: transform 0.15s ease;
+}
+
+.favourite-toggle:hover {
+    transform: scale(1.1);
+}
+
+.favourite-toggle:active {
+    transform: scale(0.95);
 }
 
 .favourite-toggle img {
@@ -1887,6 +1896,24 @@ img[src*="icon-rain"], img[src*="icon-drizzle"] {
 
 #theme-toggle:active {
   transform: scale(0.95);
+}
+
+/* Favourite animation */
+@keyframes favourite-pop {
+    0% {
+        transform: scale(1);
+    }
+    50% {transform: scale(1.1);
+    }
+    70% {transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.favourite-icon.animate {
+    animation: favourite-pop .4s ease-in-out;
 }
 
 /* Weather background effects */
