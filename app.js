@@ -1994,6 +1994,16 @@ function initializeUnitsControl() {
             }
         })
     });
+
+    document.addEventListener('click', function(event) {
+        const dropdown = document.querySelector('.dropdown-menu');
+        const unitsButton = document.getElementById('units-btn');
+
+        if (dropdown.classList.contains('show') && !dropdown.contains(event.target) && !unitsButton.contains(event.target)) {
+            dropdown.classList.remove('show');
+            unitsButton.classList.remove('active');
+        }
+    })
 }
 
 // Setup favourite toggle functionality
