@@ -124,7 +124,7 @@ header {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    gap: 0.5rem;
+    gap: 8px;
     padding: 0.25rem;
 }
 
@@ -147,7 +147,9 @@ body.light-theme .logo img {
     background-color: var(--neutral-800);
     border: 1px solid var(--neutral-600);
     border-radius: 0.5rem;
-    padding: 0.3rem;
+    padding: 8px;
+    min-width: 36px;
+    min-height: 36px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -467,6 +469,12 @@ body.light-theme .checkmark {
 .hourly-dropdown:focus-within .dropdown-image,
 .units-dropdown:hover .dropdown-toggle .dropdown-image {
     transform: rotate(180deg);
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
 }
 
 /* grid */
@@ -1006,6 +1014,16 @@ body.light-theme #compare-toggle img {
     content: url('assets/images/compare-light.webp');
 }
 
+#compare-toggle, .units-dropdown .dropdown-toggle {
+    font-size: 0.9rem;
+    padding: 8px;
+    min-width: 36px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .weather-comparison {
     margin-top: 2rem;
     padding: 1.5rem 0;
@@ -1539,12 +1557,14 @@ body.light-theme #compare-toggle img {
 #radar-button {
     display: flex;
     align-items: center;
+    font-size: 0.9rem;
     gap: 0.5rem;
     background-color: rgba(39, 37, 65, 0.8);
     color: var(--neutral-0);
     border: 1px solid var(--neutral-600);
     border-radius: 0.5rem;
-    padding: 0.5rem 0.8rem;
+    padding: 8px;
+    min-height: 36px;
     cursor: pointer;
     backdrop-filter: blur(5px);
     transition: background-color 0.2s, transform 0.1s;
@@ -2038,6 +2058,46 @@ img[src*="icon-rain"], img[src*="icon-drizzle"] {
     }
 }
 
+@media (max-width: 767px) {
+    #compare-toggle span {
+        display: none;
+    }
+
+    .units-dropdown .dropdown-toggle span {
+        display: none;
+    }
+
+    .units-dropdown .dropdown-toggle .units-image {
+        margin-right: 4px;
+    }
+
+    .radar-toggle {
+        position: absolute;
+        top: auto;
+        left: auto;
+        bottom: 20px;
+        right: 20px;
+        z-index: 5;
+    }
+
+    #radar-button {
+        padding: 10px;
+        min-width: 32px;
+        min-height: 32px;
+        background-color: rgba(39, 37, 65, 0.6);
+        backdrop-filter: blur(5px);
+        border-radius: 50%;
+    }
+
+    #radar-button span {
+        display: none;
+    }
+
+    #radar-button img {
+        margin-right: 0;
+    }
+}
+
 @media (min-width: 768px) {
     :root {
         --fs-header: 3.2rem;
@@ -2110,6 +2170,41 @@ img[src*="icon-rain"], img[src*="icon-drizzle"] {
 
     .trend-message {
         font-size: 1rem;
+    }
+
+    .header-bar {
+        gap: 0.5rem;
+    }
+
+    .theme-controls {
+        gap: 0.75rem;
+    }
+
+    #compare-toggle, .units-dropdown .dropdown-toggle {
+        font-size: var(--fs-body);
+        padding: 0.5rem 0.8rem;
+    }
+
+    .radar-toggle {
+        top: 20px;
+        left: 20px;
+        bottom: auto;
+        right: auto;
+    }
+
+    #radar-button {
+        font-size: var(--fs-body);
+        padding: 0.5rem 0.8rem;
+        border-radius: 0.5rem 0.8rem;
+        background-color: rgba(39, 37, 65, 0.8);
+    }
+
+    #radar-button img {
+        margin-right: 8px;
+    }
+
+    #compare-toggle span, .units-dropdown .dropdown-toggle span, #radar-button span {
+        display: inline;
     }
 }
 
