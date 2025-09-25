@@ -2284,14 +2284,14 @@ img[src*="icon-rain"], img[src*="icon-drizzle"] {
         align-self: start;
         display: flex;
         flex-direction: column;
-        max-height: calc(100vh - 160px);
+        max-height: unset;
     }
     .item.daily-forecast { 
         grid-area: daily; 
     }
     .item.hourly-forecast { 
         grid-area: hourly; 
-        height: 100%; 
+        height: 725px;
     }
 
     .favourites-list {
@@ -2300,7 +2300,7 @@ img[src*="icon-rain"], img[src*="icon-drizzle"] {
         gap: 0.8rem;
         flex: 1;
         min-height: 0;
-        max-height: calc(100vh - 395px);
+        max-height: 660px;
         overflow-y: auto;
         scroll-behavior: smooth;
         scrollbar-width: none;
