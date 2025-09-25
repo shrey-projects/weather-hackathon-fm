@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Weather forecast app with current conditions, hourly and daily forecasts, and location comparisons"
+    />
 
     <link
       rel="icon"
@@ -17,24 +21,30 @@
   <body>
     <div class="weather-background-effects">&nbsp;</div>
     <div class="container">
-      <header>
+      <header role="banner">
         <div class="header-bar">
           <div class="logo">
             <img src="assets/images/logo.svg" alt="Weather Now Logo" />
           </div>
-          <div class="theme-controls">
-            <button id="theme-toggle" aria-label="Toggle theme">
-              <img
-                src="assets/images/light-mode.webp"
-                alt="Switch to light mode"
-              />
+          <div class="theme-controls" role="toolbar" aria-label="View options">
+            <button
+              id="theme-toggle"
+              aria-label="Toggle theme"
+              aria-pressed="false"
+            >
+              <img src="assets/images/light-mode.webp" alt="" />
             </button>
             <button id="compare-toggle" aria-label="Compare locations">
-              <img src="assets/images/compare.webp" alt="Compare" />
+              <img src="assets/images/compare.webp" alt="" />
               Compare
             </button>
             <div class="units-dropdown">
-              <button class="dropdown-toggle" id="units-btn">
+              <button
+                class="dropdown-toggle"
+                id="units-btn"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
                 <img
                   class="units-image"
                   src="assets/images/icon-units.svg"
@@ -116,7 +126,7 @@
         </div>
 
         <h1>How's the sky looking today?</h1>
-        <form class="search-form">
+        <form class="search-form" role="search">
           <div class="search-input-container">
             <div class="search-input">
               <img
@@ -130,16 +140,23 @@
                 placeholder="Search for a city..."
                 autocomplete="off"
                 required
+                aria-label="Search for a location"
               />
             </div>
-            <div class="search-suggestions">a</div>
+            <div
+              class="search-suggestions"
+              role="listbox"
+              aria-label="Search suggestions"
+            >
+              a
+            </div>
           </div>
-          <button type="submit">Search</button>
+          <button type="submit" aria-label="Search">Search</button>
         </form>
       </header>
-      <div class="loading-overlay">
+      <div class="loading-overlay" role="status" aria-live="polite">
         <div class="loading-animation">
-          <div class="weather-icon-container">
+          <div class="weather-icon-container" aria-hidden="true">
             <div class="sun-rays"></div>
             <div class="sun-core"></div>
             <div class="cloud cloud-1">
@@ -157,8 +174,8 @@
           </div>
         </div>
       </div>
-      <main class="main-content">
-        <div class="item current-weather">
+      <main class="main-content" role="main">
+        <div class="item current-weather" aria-labelledby="weather-location">
           <section class="weather-main">
             <div class="favourite-toggle">
               <img
@@ -168,6 +185,9 @@
                 data-location=""
                 data-lat=""
                 data-lon=""
+                role="button"
+                tabindex="0"
+                aria-pressed="false"
               />
             </div>
             <div class="radar-toggle">
@@ -201,8 +221,13 @@
           </section>
 
           <section class="weather-details-container">
-            <div class="weather-details-wrapper">
-              <div class="weather-details active">
+            <div class="weather-details-wrapper" role="tablist">
+              <div
+                class="weather-details active"
+                role="tabpanel"
+                id="details-tab-1"
+                aria-labelledby="tab-dot-1"
+              >
                 <div class="weather-detail">
                   <span class="weather-detail-label">Feels Like</span>
                   <span class="weather-detail-value" id="weather-feelslike"
@@ -229,7 +254,12 @@
                 </div>
               </div>
 
-              <div class="weather-details">
+              <div
+                class="weather-details"
+                role="tabpanel"
+                id="details-tab-2"
+                aria-labelledby="tab-dot-2"
+              >
                 <div class="weather-detail">
                   <span class="weather-detail-label">UV Index</span>
                   <span class="weather-detail-value" id="weather-uv"
@@ -256,22 +286,44 @@
                 </div>
               </div>
             </div>
-            <div class="weather-navigation">
+            <div
+              class="weather-navigation"
+              role="group"
+              aria-label="Weather details navigation"
+            >
               <button
                 class="nav-arrow nav-prev"
                 aria-label="Previous weather details"
+                tabindex="0"
               >
                 <img src="assets/images/icon-dropdown.svg" alt="" />
               </button>
 
               <div class="pagination-dots">
-                <span class="dot active" data-index="0"></span>
-                <span class="dot" data-index="1"></span>
+                <span
+                  class="dot active"
+                  data-index="0"
+                  id="tab-dot-1"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="details-tab-1"
+                  tabindex="0"
+                ></span>
+                <span
+                  class="dot"
+                  data-index="1"
+                  id="tab-dot-2"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="details-tab-2"
+                  tabindex="0"
+                ></span>
               </div>
 
               <button
                 class="nav-arrow nav-next"
                 aria-label="Next weather details"
+                tabindex="0"
               >
                 <img src="assets/images/icon-dropdown.svg" alt="" />
               </button>
@@ -286,16 +338,19 @@
             <div class="no-favourites">No favourite locations added yet</div>
           </div>
         </div>
-        <div class="item daily-forecast">
-          <h2>Daily forecast</h2>
-          <div class="weekly-trend">
+        <div
+          class="item daily-forecast"
+          aria-labelledby="daily-forecast-heading"
+        >
+          <h2 id="daily-forecast-heading">Daily forecast</h2>
+          <div class="weekly-trend" role="status" aria-live="polite">
             <div class="trend-icon">📊</div>
             <p class="trend-message" id="weekly-trend-message">
               Loading weekly comparison...
             </p>
           </div>
-          <ul>
-            <li class="daily-card">
+          <ul role="list">
+            <li class="daily-card" role="listitem">
               <span class="daily-day">Tue</span>
               <img src="assets/images/icon-rain.webp" alt="Rain" />
               <div class="daily-temps">
@@ -303,7 +358,7 @@
                 <span class="daily-temperature-low">14°</span>
               </div>
             </li>
-            <li class="daily-card">
+            <li class="daily-card" role="listitem">
               <span class="daily-day">Wed</span>
               <img src="assets/images/icon-drizzle.webp" alt="Drizzle" />
               <div class="daily-temps">
@@ -311,7 +366,7 @@
                 <span class="daily-temperature-low">15°</span>
               </div>
             </li>
-            <li class="daily-card">
+            <li class="daily-card" role="listitem">
               <span class="daily-day">Thu</span>
               <img src="assets/images/icon-sunny.webp" alt="Sunny" />
               <div class="daily-temps">
@@ -319,7 +374,7 @@
                 <span class="daily-temperature-low">14°</span>
               </div>
             </li>
-            <li class="daily-card">
+            <li class="daily-card" role="listitem">
               <span class="daily-day">Fri</span>
               <img
                 src="assets/images/icon-partly-cloudy.webp"
@@ -330,7 +385,7 @@
                 <span class="daily-temperature-low">13°</span>
               </div>
             </li>
-            <li class="daily-card">
+            <li class="daily-card" role="listitem">
               <span class="daily-day">Sat</span>
               <img src="assets/images/icon-storm.webp" alt="Storm" />
               <div class="daily-temps">
@@ -338,7 +393,7 @@
                 <span class="daily-temperature-low">15°</span>
               </div>
             </li>
-            <li class="daily-card">
+            <li class="daily-card" role="listitem">
               <span class="daily-day">Sun</span>
               <img src="assets/images/icon-snow.webp" alt="Snow" />
               <div class="daily-temps">
@@ -346,7 +401,7 @@
                 <span class="daily-temperature-low">16°</span>
               </div>
             </li>
-            <li class="daily-card">
+            <li class="daily-card" role="listitem">
               <span class="daily-day">Mon</span>
               <img src="assets/images/icon-fog.webp" alt="Fog" />
               <div class="daily-temps">
@@ -356,9 +411,12 @@
             </li>
           </ul>
         </div>
-        <div class="item hourly-forecast">
+        <div
+          class="item hourly-forecast"
+          aria-labelledby="hourly-forecast-heading"
+        >
           <div class="hourly-header">
-            <h2>Hourly forecast</h2>
+            <h2 id="hourly-forecast-heading">Hourly forecast</h2>
             <div class="hourly-dropdown">
               <button class="dropdown-toggle">
                 Tuesday
@@ -380,15 +438,15 @@
               </div>
             </div>
           </div>
-          <ul>
-            <li class="hourly-card">
+          <ul role="list">
+            <li class="hourly-card" role="listitem">
               <div class="hourly-card-time">
                 <img src="assets/images/icon-overcast.webp" alt="Cloudy" />
                 <span class="hour">3 PM</span>
               </div>
               <span class="hourly-temperature">20°</span>
             </li>
-            <li class="hourly-card">
+            <li class="hourly-card" role="listitem">
               <div class="hourly-card-time">
                 <img
                   src="assets/images/icon-partly-cloudy.webp"
@@ -399,7 +457,7 @@
 
               <span class="hourly-temperature">20°</span>
             </li>
-            <li class="hourly-card">
+            <li class="hourly-card" role="listitem">
               <div class="hourly-card-time">
                 <img src="assets/images/icon-sunny.webp" alt="Sunny" />
                 <span class="hour">5 PM</span>
@@ -407,7 +465,7 @@
 
               <span class="hourly-temperature">20°</span>
             </li>
-            <li class="hourly-card">
+            <li class="hourly-card" role="listitem">
               <div class="hourly-card-time">
                 <img src="assets/images/icon-overcast.webp" alt="Cloudy" />
                 <span class="hour">6 PM</span>
@@ -415,7 +473,7 @@
 
               <span class="hourly-temperature">19°</span>
             </li>
-            <li class="hourly-card">
+            <li class="hourly-card" role="listitem">
               <div class="hourly-card-time">
                 <img src="assets/images/icon-snow.webp" alt="Snow" />
                 <span class="hour">7 PM</span>
@@ -423,7 +481,7 @@
 
               <span class="hourly-temperature">18°</span>
             </li>
-            <li class="hourly-card">
+            <li class="hourly-card" role="listitem">
               <div class="hourly-card-time">
                 <img src="assets/images/icon-fog.webp" alt="Fog" />
                 <span class="hour">8 PM</span>
@@ -431,7 +489,7 @@
 
               <span class="hourly-temperature">18°</span>
             </li>
-            <li class="hourly-card">
+            <li class="hourly-card" role="listitem">
               <div class="hourly-card-time">
                 <img src="assets/images/icon-snow.webp" alt="Snow" />
                 <span class="hour">9 PM</span>
@@ -439,7 +497,7 @@
 
               <span class="hourly-temperature">17°</span>
             </li>
-            <li class="hourly-card">
+            <li class="hourly-card" role="listitem">
               <div class="hourly-card-time">
                 <img src="assets/images/icon-overcast.webp" alt="Cloudy" />
                 <span class="hour">10 PM</span>
@@ -450,15 +508,19 @@
           </ul>
         </div>
       </main>
-      <section id="weather-comparison" class="weather-comparison">
+      <section
+        id="weather-comparison"
+        class="weather-comparison"
+        aria-labelledby="comparison-heading"
+      >
         <div class="comparison-header">
-          <h2>Compare Weather</h2>
+          <h2 id="comparison-heading">Compare Weather</h2>
           <p>See how weather conditions differ across two cities</p>
         </div>
-        <div class="comparison-cities">
+        <div class="comparison-cities" role="group">
           <div class="comparison-city">
             <h3>Location 1</h3>
-            <div class="comparison-search-container">
+            <div class="comparison-search-container" role="search">
               <div class="search-input comparison-search">
                 <img
                   class="search-image"
@@ -470,11 +532,21 @@
                   name="comparison-location-1"
                   placeholder="Search for a city..."
                   autocomplete="off"
+                  aria-label="Search for a location"
                 />
               </div>
-              <div class="search-suggestions comparison-suggestions"></div>
+              <div
+                class="search-suggestions comparison-suggestions"
+                role="listbox"
+                aria-label="Search suggestions"
+              ></div>
             </div>
-            <div class="comparison-results" id="comparison-results-1">
+            <div
+              class="comparison-results"
+              id="comparison-results-1"
+              aria-live="polite"
+              aria-atomic="true"
+            >
               <div class="comparison-placeholder">
                 Select a location to compare
               </div>
@@ -483,7 +555,7 @@
           <div class="comparison-vs">VS</div>
           <div class="comparison-city">
             <h3>Location 2</h3>
-            <div class="comparison-search-container">
+            <div class="comparison-search-container" role="search">
               <div class="search-input comparison-search">
                 <img
                   class="search-image"
@@ -495,11 +567,21 @@
                   name="comparison-location-2"
                   placeholder="Search for a city..."
                   autocomplete="off"
+                  aria-label="Search for a location"
                 />
               </div>
-              <div class="search-suggestions comparison-suggestions"></div>
+              <div
+                class="search-suggestions comparison-suggestions"
+                role="listbox"
+                aria-label="Search suggestions"
+              ></div>
             </div>
-            <div class="comparison-results" id="comparison-results-2">
+            <div
+              class="comparison-results"
+              id="comparison-results-2"
+              aria-live="polite"
+              aria-atomic="true"
+            >
               <div class="comparison-placeholder">
                 Select a location to compare
               </div>
@@ -507,10 +589,17 @@
           </div>
         </div>
       </section>
-      <div id="radar-modal" class="radar-modal">
+      <div
+        id="radar-modal"
+        class="radar-modal"
+        role="dialog"
+        aria-labelledby="radar-heading"
+        aria-modal="true"
+        hidden
+      >
         <div class="radar-modal-content">
           <div class="radar-modal-header">
-            <h2>Weather Radar</h2>
+            <h2 id="radar-heading">Weather Radar</h2>
             <button class="radar-close-button" aria-label="Close radar view">
               &times;
             </button>
