@@ -13,6 +13,9 @@ let locationMarker = null;
 let currentFrameIndex = -1;
 let animationInterval = null;
 let leafletLoaded = false;
+let isTempMetric = true;
+let isWindMetric = true;
+let isPrecipMetric = true;
 
 function fetchWeather(latitude, longitude, cityName = '', countryName = '', isCurrentLocation = false){
     // Show loading animation
@@ -23,9 +26,15 @@ function fetchWeather(latitude, longitude, cityName = '', countryName = '', isCu
     const windLabels = document.querySelectorAll('.dropdown-section:nth-child(3) .dropdown-label');
     const precipLabels = document.querySelectorAll('.dropdown-section:nth-child(4) .dropdown-label');
 
-    const tempUnit = tempLabels[0].classList.contains('active') ? 'celsius' : 'fahrenheit';
-    const windUnit = windLabels[0].classList.contains('active') ? 'kmh' : 'mph';
-    const precipUnit = precipLabels[0].classList.contains('active') ? 'mm' : 'inch';
+    isTempMetric = tempLabels[0].classList.contains('active');
+    isWindMetric = windLabels[0].classList.contains('active');
+    isPrecipMetric = precipLabels[0].classList.contains('active');
+
+    isMetric = isTempMetric && isWindMetric && isPrecipMetric;
+
+    const tempUnit = isTempMetric ? 'celsius' : 'fahrenheit';
+    const windUnit = isWindMetric ? 'kmh' : 'mph';
+    const precipUnit = isPrecipMetric ? 'mm' : 'inch';
 
     // Open-Meteo API endpoint
     const unitParams = `&temperature_unit=${tempUnit}&windspeed_unit=${windUnit}&precipitation_unit=${precipUnit}`;
@@ -138,11 +147,11 @@ function fetchWeather(latitude, longitude, cityName = '', countryName = '', isCu
 
         // Precipitation
         const precipitation = hourly.precipitation[currentHourIndex];
-        document.getElementById('weather-precip').textContent = precipitation !== undefined ? `${precipitation} ${isMetric ? 'mm' : 'in'}` : '--';
+        document.getElementById('weather-precip').textContent = precipitation !== undefined ? `${precipitation} ${isPrecipMetric ? 'mm' : 'in'}` : '--';
 
 
         // Wind
-        document.getElementById('weather-wind').textContent = `${Math.round(current.windspeed)} ${isMetric ? 'km/h' : 'mph'}`;
+        document.getElementById('weather-wind').textContent = `${Math.round(current.windspeed)} ${isWindMetric ? 'km/h' : 'mph'}`;
         
         // UV Index
         const uvIndex = hourly.uv_index ? hourly.uv_index[currentHourIndex] : undefined;
@@ -485,6 +494,9 @@ function renderHourlyForecast(hourlyList, hourly, startIndex, hoursToShow, daily
 
 function toggleUnits() {
     isMetric = !isMetric;
+    isTempMetric = isMetric;
+    isWindMetric = isMetric;
+    isPrecipMetric = isMetric;
 
     // Update dropdown button text
     const switchButton = document.querySelector('.dropdown-section:first-child .dropdown-switch');
@@ -1504,7 +1516,7 @@ function fetchComparisonWeather(latitude, longitude, cityName = '', countryName 
             </div>
             <div class="comparison-metric">
               <span class="metric-label">Wind Speed</span>
-              <span class="metric-value" data-metric="wind">${windSpeed} ${isMetric ? 'km/h' : 'mph'}</span>
+              <span class="metric-value" data-metric="wind">${windSpeed} ${isWindMetric ? 'km/h' : 'mph'}</span>
             </div>
             <div class="comparison-metric">
               <span class="metric-label">UV Index</span>
@@ -1960,11 +1972,11 @@ function initializeUnitsControl() {
             const windLabels = document.querySelectorAll('.dropdown-section:nth-child(3) .dropdown-label');
             const precipLabels = document.querySelectorAll('.dropdown-section:nth-child(4) .dropdown-label');
 
-            const tempIsMetric = tempLabels[0].classList.contains('active');
-            const windIsMetric = windLabels[0].classList.contains('active');
-            const precipIsMetric = precipLabels[0].classList.contains('active');
+            isTempMetric = tempLabels[0].classList.contains('active');
+            isWindMetric = windLabels[0].classList.contains('active');
+            isPrecipMetric = precipLabels[0].classList.contains('active');
 
-            isMetric = tempIsMetric && windIsMetric && precipIsMetric;
+            isMetric = isTempMetric && isWindMetric && isPrecipMetric;
 
             const switchButton = document.querySelector('.dropdown-section:first-child .dropdown-switch');
             switchButton.textContent = isMetric ? 'Switch to Imperial' : 'Switch to Metric';
@@ -1992,7 +2004,24 @@ function initializeUnitsControl() {
                     fetchWeather(35.68, 139.65, 'Tokyo', 'Japan');
                 }
             }
-        })
+
+            document.querySelectorAll('.comparison-card').forEach(card => {
+                const resultId = card.closest('[id^="comparison-results"]').id;
+                const inputName = resultId === 'comparison-results-1' ? 'comparison-location-1' : 'comparison-location-2';
+                const inputValue = document.querySelector(`input[name="${inputName}"]`).value;
+
+                if (inputValue) {
+                    fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(inputValue)}&count=1`)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.results && data.results.length > 0) {
+                                const result = data.results[0];
+                                fetchComparisonWeather(result.latitude, result.longitude, result.name, result.country, resultId);
+                            }
+                        });
+                }
+            })
+        });
     });
 
     document.addEventListener('click', function(event) {
