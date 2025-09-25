@@ -705,10 +705,15 @@ function fetchCitySuggestions(query) {
             if (data.results && data.results.length > 0) {
                 data.results.forEach(city => {
                     const displayName = city.country === city.name ? city.name : `${city.name}, ${city.country}`;
+                    const countryCode = city.country_code?.toUpperCase() || '';
 
                     const suggestion = document.createElement('div');
                     suggestion.classList.add('suggestion-item');
-                    suggestion.textContent = displayName;
+
+                    suggestion.innerHTML = `
+                        ${countryCode ? `<img class="country-flag" src="https://flagsapi.com/${countryCode}/flat/32.png" alt="${city.country}" flag">` : ''}
+                        <span>${displayName}</span>
+                    `;
 
                     suggestion.addEventListener('click', () => {
                         fetchWeather(city.latitude, city.longitude, city.name, city.country);
@@ -1374,11 +1379,17 @@ function setupComparisonSearch(inputName, suggestionsClass, resultsId) {
             if (data.results && data.results.length > 0) {
                 data.results.forEach(city => {
                 const displayName = city.country === city.name ? city.name : `${city.name}, ${city.country}`;
-                
+                const countryCode = city.country_code?.toUpperCase() || '';
+
+
                 const suggestion = document.createElement('div');
                 suggestion.classList.add('suggestion-item');
-                suggestion.textContent = displayName;
-                
+
+                suggestion.innerHTML = `
+                    ${countryCode ? `<img class="country-flag" src="https://flagsapi.com/${countryCode}/flat/32.png" alt="${city.country}" flag">` : ''}
+                    <span>${displayName}</span>
+                `;
+
                 suggestion.addEventListener('click', () => {
                     fetchComparisonWeather(city.latitude, city.longitude, city.name, city.country, resultsId);
                     searchInput.value = displayName;
