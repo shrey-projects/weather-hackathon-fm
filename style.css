@@ -431,6 +431,26 @@ body.light-theme .dropdown-image {
     transition: color 0.2s, background-color 0.2s;
     margin-bottom: 0.1rem;
     gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.dropdown-label::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--neutral-700);
+    z-index: -1;
+    transition: transform 0.3s ease;
+    transform: translateX(-100%);
+}
+
+.dropdown-label:hover::before {
+    transform: translateX(0);
 }
 
 .checkmark {
@@ -638,10 +658,26 @@ body.light-theme .weather-tip {
     border-radius: 0.5rem;
     cursor: pointer;
     border: 1px solid var(--neutral-600);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
 }
 
-.favourite-card:hover {
+.favourite-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-color: var(--neutral-600);
+    z-index: -1;
+    transition: transform 0.3s ease;
+    transform: translateX(-100%);
+}
+
+.favourite-card:hover::before {
+    transform: translateX(0);
 }
 
 .favourite-location {
@@ -791,11 +827,31 @@ body.light-theme .nav-arrow img {
     border-radius: 50%;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
+    position: relative;
+    overflow: visible;
+}
+
+.dot::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background-color: rgba(var(--primary), 0.2);
+    border-radius: 50%;
+    z-index: -1;
+    transform: scale(0);
+    transition: transform 0.3s ease;
 }
 
 .dot:hover {
     transform: scale(1.2);
     background-color: var(--neutral-300);
+}
+
+.dot:hover::after {
+    transform: scale(1);
 }
 
 .dot.active {
@@ -824,6 +880,26 @@ body.light-theme .nav-arrow img {
     gap: 0.4rem;
     transition: transform 0.2s ease-out;
     height: 100px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.weather-detail::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--neutral-600);
+    z-index: -1;
+    transition: transform 0.3s ease;
+    transform: translateY(100%);
+}
+
+.weather-detail:hover::before {
+    transform: translateY(0);
 }
 
 .weather-detail:hover, .daily-card:hover {
@@ -980,11 +1056,27 @@ body.light-theme .nav-arrow img {
     border-radius: 0.3rem;
     outline: none;
     margin: 0 0.5rem;
-    transition: background 0.2s
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
 }
 
-.weekday-item:hover, .weekday-item:focus  {
+.weekday-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-color: var(--neutral-700);
+    z-index: -1;
+    transition: transform 0.3s ease;
+    transform: translateX(-100%);
+}
+
+.weekday-item:hover::before, .weekday-item:focus::before  {
+    transform: translateX(0);
 }
 
 .weekday-item.active {
@@ -2386,6 +2478,26 @@ img[src*="icon-rain"], img[src*="icon-drizzle"] {
         padding: 0.8rem 0.4rem;
         gap: 0.5rem;
         transition: transform 0.2s ease-out;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .daily-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--neutral-600);
+        z-index: -1;
+        transition: transform 0.3s ease;
+        transform: translateY(100%);
+    }
+
+    .daily-card:hover::before {
+        transform: translateY(0);
     }
 
     .daily-day {
