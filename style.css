@@ -67,6 +67,44 @@ body {
     transition: background-color 0.5s ease;
 }
 
+/* Accessibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary);
+    color: white;
+    padding: 8px;
+    z-index: 1001;
+    transition: top 0.3s;
+}
+
+.skip-link:focus {
+    top: 0; 
+    outline: 3px solid var(--primary-dark);
+    position: fixed;
+}
+
+.skip-link:focus-visible {
+    top: 0;
+    position: fixed;
+    outline: 3px solid var(--primary-dark);
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.search-input:focus-within {
+    box-shadow: 0 0 0 2px var(--primary);
+    outline: none;
+}
+
 /* Global transitions */
 
 .dropdown-toggle,
