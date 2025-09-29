@@ -1063,7 +1063,7 @@ function getWeatherTip(data, currentHourIndex) {
         tips.push({ icon: "👕", text: "Perfect weather for a t-shirt!"});
         tips.push({ icon: "🍦", text: "Enjoy an ice cream today!"});
     } else {
-        tips.push({ icon: "☀️", text: "It's hot today, stray hydrated and seek shade."});
+        tips.push({ icon: "☀️", text: "It's hot today, stay hydrated and seek shade."});
         tips.push({ icon: "🧢", text: "Make sure to use sunscreen and a hat!"});
     }
 
